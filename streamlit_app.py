@@ -17,7 +17,7 @@ def main():
 
     # upload file
     pdf = st.file_uploader("Upload your PDF", type="pdf")
-    
+    summary = None
     # extract the text
     if pdf is not None:
         try:
