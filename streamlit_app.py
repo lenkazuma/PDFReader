@@ -57,7 +57,7 @@ def main():
 
             # show user input
             user_question = st.text_input("Ask a question about your PDF:")
-            if user_question is not None:
+            if user_question:
                 docs = knowledge_base.similarity_search(user_question)
                 with st.spinner('Wait for it...'):
                   with get_openai_callback() as cb:
