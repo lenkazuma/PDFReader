@@ -9,9 +9,6 @@ from langchain.llms import OpenAI
 from langchain.callbacks import get_openai_callback
 import os
 
-#APIs
-#os.environ["SERPAPI_API_KEY"] = "d20a4926c2742d840867291d37ce58bc73f8281896d89672c11eecce1057144d"
-os.environ["OPENAI_API_KEY"] ="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"
 
 
 def main():
