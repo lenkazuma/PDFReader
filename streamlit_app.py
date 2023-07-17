@@ -56,16 +56,15 @@ def main():
             user_question = st.text_input("Ask a question about your PDF:")
             if user_question:
                 docs = knowledge_base.similarity_search(user_question)
-
-                llm = OpenAI()
-                chain = load_qa_chain(llm, chain_type="stuff")
-                with get_openai_callback() as cb:
-                    response = chain.run(input_documents=docs, question=user_question)
-                    print(cb)
-                    # show/hide section using st.beta_expander
-                    with st.expander("Used Tokens", expanded=False):
-                      st.write(cb)
-                
+                with st.spinner('Wait for it...'):
+                  llm = OpenAI()
+                  chain = load_qa_chain(llm, chain_type="stuff")
+                  with get_openai_callback() as cb:
+                     response = chain.run(input_documents=docs, question=user_question)
+                     print(cb)
+                     # show/hide section using st.beta_expander
+                     with st.expander("Used Tokens", expanded=False):
+                       st.write(cb)
                 st.write(response)
                 
         except IndexError:
