@@ -41,7 +41,7 @@ def main():
       
       # brief summary 
       pdf_summary = "Give me a brief summary of the pdf"
-      
+
       docs = knowledge_base.similarity_search(pdf_summary)
         
       llm = OpenAI()
