@@ -48,12 +48,12 @@ def main():
             
             
             
-            #with st.spinner('Wait for it...'):
-            #with get_openai_callback() as cb:
-            docs = knowledge_base.similarity_search(pdf_summary)
-            summary = chain.run(input_documents=docs, question=pdf_summary)
-                  #print(cb)
-            st.write(summary)
+            with st.spinner('Wait for it...'):
+              #with get_openai_callback() as cb:
+              docs = knowledge_base.similarity_search(pdf_summary)
+              summary = chain.run(input_documents=docs, question=pdf_summary)
+                    #print(cb)
+              st.write(summary)
             #st.success('Done!')
 
 
