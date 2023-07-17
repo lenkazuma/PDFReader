@@ -11,6 +11,10 @@ from langchain.callbacks import get_openai_callback
 import os
 
 def main():
+    # brief summary
+    llm = OpenAI()
+    chain = load_qa_chain(llm, chain_type="stuff")
+
     load_dotenv()
     st.set_page_config(page_title="Ask your PDF")
     st.title("Ask your PDF ✨")
@@ -38,10 +42,6 @@ def main():
             # create embeddings
             embeddings = OpenAIEmbeddings(disallowed_special=())
             knowledge_base = FAISS.from_texts(chunks,embeddings)
-
-            # brief summary
-            llm = OpenAI()
-            chain = load_qa_chain(llm, chain_type="stuff")
 
             st.header("Here's a brief summary of your PDF:")
             pdf_summary = "Give me a brief summary of the pdf"
