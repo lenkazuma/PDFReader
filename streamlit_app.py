@@ -17,7 +17,7 @@ def main():
 
     # upload file
     pdf = st.file_uploader("Upload your PDF", type="pdf")
-    summary =""
+    
     # extract the text
     if pdf is not None:
         try:
@@ -47,7 +47,7 @@ def main():
             pdf_summary = "Give me a brief summary of the pdf"
             
 
-            if pdf_summary is not None and summary is not None:
+            if pdf_summary is not None and summary is None:
               with st.spinner('Wait for it...'):
                 docs = knowledge_base.similarity_search(pdf_summary)
                 summary = chain.run(input_documents=docs, question=pdf_summary)
