@@ -11,14 +11,14 @@ from langchain.callbacks import get_openai_callback
 import os
 
 
-@st.cache
+
 def generate_summary(knowledge_base, chain):
     pdf_summary = "Give me a brief summary of the pdf"
     docs = knowledge_base.similarity_search(pdf_summary)
     summary = chain.run(input_documents=docs, question=pdf_summary)
     return summary
 
-@st.cache
+
 def main():
     load_dotenv()
     st.set_page_config(page_title="Ask your PDF")
