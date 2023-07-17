@@ -47,10 +47,10 @@ def main():
 
             llm = OpenAI()
             chain = load_qa_chain(llm, chain_type="stuff")
-            with get_openai_callback() as cb:
-                response = chain.run(input_documents=docs, question=pdf_summary)
-                print(cb)
-            st.write(response)
+            with get_openai_callback() as cb_summary:
+                summary = chain.run(input_documents=docs, question=pdf_summary)
+                print(cb_summary)
+            st.write(summary)
 
             # show user input
             user_question = st.text_input("Ask a question about your PDF:")
