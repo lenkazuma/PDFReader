@@ -10,19 +10,21 @@ from langchain.llms import OpenAI
 from langchain.callbacks import get_openai_callback
 import os
 
+
+@st.cache
+def generate_summary(knowledge_base, chain):
+    pdf_summary = "Give me a brief summary of the pdf"
+    docs = knowledge_base.similarity_search(pdf_summary)
+    summary = chain.run(input_documents=docs, question=pdf_summary)
+    return summary
+
 def main():
     load_dotenv()
     st.set_page_config(page_title="Ask your PDF")
     st.title("Ask your PDF ✨")
 
     # upload file
-
-
     pdf = st.file_uploader("Upload your PDF", type="pdf")
-    summary = None
-    with st.spinner('Wait for it...'):
-      time.sleep(5)
-      st.header("test loader")
     
     # extract the text
     if pdf is not None:
@@ -50,15 +52,13 @@ def main():
             chain = load_qa_chain(llm, chain_type="stuff")
 
             st.header("Here's a brief summary of your PDF:")
-            pdf_summary = "Give me a brief summary of the pdf"
-            
 
-            if pdf_summary is not None and summary is None:
-              with st.spinner('Wait for it...'):
-                docs = knowledge_base.similarity_search(pdf_summary)
-                summary = chain.run(input_documents=docs, question=pdf_summary)
-                st.write(summary)
-              #st.success('Done!')
+            with st.spinner('Wait for it...'):
+              #docs = knowledge_base.similarity_search(pdf_summary)
+              #summary = chain.run(input_documents=docs, question=pdf_summary)
+              summary = generate_summary(knowledge_base, chain)
+              st.write(summary)
+            #st.success('Done!')
 
 
             # show user input
