@@ -40,7 +40,6 @@ def main():
 
             # brief summary
             st.header("Here's a brief summary of your PDF:")
-            st.caption("Well, if your PDF doesn't contain any text then try another one.🆖")
             pdf_summary = "Give me a brief summary of the pdf"
 
             docs = knowledge_base.similarity_search(pdf_summary)
@@ -62,10 +61,11 @@ def main():
                 with get_openai_callback() as cb:
                     response = chain.run(input_documents=docs, question=user_question)
                     print(cb)
-
+                
                 st.write(response)
 
         except IndexError:
+            st.caption("Well, Seems like your PDF doesn't contain any text, try another one.🆖")
             st.error("Please upload another PDF. This PDF does not contain any text.")
         except Exception as e:
             st.error(f"An error occurred: {str(e)}")
