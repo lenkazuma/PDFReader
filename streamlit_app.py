@@ -16,8 +16,14 @@ def main():
     st.title("Ask your PDF ✨")
 
     # upload file
+
+
     pdf = st.file_uploader("Upload your PDF", type="pdf")
     summary = None
+    with st.spinner('Wait for it...'):
+      time.sleep(5)
+      st.header("test loader")
+    
     # extract the text
     if pdf is not None:
         try:
