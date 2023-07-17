@@ -49,15 +49,7 @@ def main():
             with get_openai_callback() as cb:
                 response = chain.run(input_documents=docs, question=pdf_summary)
                 print(cb)
-            
-            show_hide_cb = st.button("Show Used Token")
-
-            if show_hide_cb:
-                st.write(cb)
-                show_hide_cb = st.button("Hide Used Token")
-
-            if not show_hide_cb:
-                st.write(response)
+            st.write(response)
 
             # show user input
             user_question = st.text_input("Ask a question about your PDF:")
@@ -69,9 +61,17 @@ def main():
                 with get_openai_callback() as cb:
                     response = chain.run(input_documents=docs, question=user_question)
                     print(cb)
+                    # show/hide section using st.beta_expander
+                    with st.beta_expander("Used Tokens", expanded=False):
+                      show_hide_cb = st.button("Show Used Token")
+                      if show_hide_cb:
+                        st.write(cb)
                 
                 st.write(response)
-
+            
+            
+            
+                
         except IndexError:
             st.caption("Well, Seems like your PDF doesn't contain any text, try another one.🆖")
             st.error("Please upload another PDF. This PDF does not contain any text.")
