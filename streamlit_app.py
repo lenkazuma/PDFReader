@@ -1,5 +1,6 @@
 from dotenv import load_dotenv
 import streamlit as st
+import time
 from PyPDF2 import PdfReader
 from langchain.text_splitter import CharacterTextSplitter
 from langchain.embeddings.openai import OpenAIEmbeddings
@@ -62,13 +63,10 @@ def main():
                     response = chain.run(input_documents=docs, question=user_question)
                     print(cb)
                     # show/hide section using st.beta_expander
-                    with st.beta_expander("Used Tokens", expanded=False):
+                    with st.expander("Used Tokens", expanded=False):
                       st.write(cb)
                 
                 st.write(response)
-            
-            
-            
                 
         except IndexError:
             st.caption("Well, Seems like your PDF doesn't contain any text, try another one.🆖")
