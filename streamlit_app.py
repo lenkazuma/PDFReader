@@ -12,7 +12,7 @@ import os
 def main():
     load_dotenv()
     st.set_page_config(page_title="Ask your PDF")
-    st.header("Ask your PDF 💬")
+    st.title("Ask your PDF ✨")
 
     # upload file
     pdf = st.file_uploader("Upload your PDF", type="pdf")
@@ -39,6 +39,8 @@ def main():
             knowledge_base = FAISS.from_texts(chunks, embeddings)
 
             # brief summary
+            st.header("Here's a brief summary of your PDF:")
+            st.subheader("Well, if your PDF doesn't contain any text then try another one.🆖")
             pdf_summary = "Give me a brief summary of the pdf"
 
             docs = knowledge_base.similarity_search(pdf_summary)
