@@ -36,7 +36,7 @@ def main():
 
             # create embeddings
             embeddings = OpenAIEmbeddings(disallowed_special=())
-            knowledge_base = FAISS.from_texts(chunks, embeddings)
+            knowledge_base = FAISS.from_texts(chunks)
 
             # brief summary
             st.header("Here's a brief summary of your PDF:")
@@ -49,7 +49,15 @@ def main():
             with get_openai_callback() as cb:
                 response = chain.run(input_documents=docs, question=pdf_summary)
                 print(cb)
-            st.write(response)
+            
+            show_hide_cb = st.button("Show Used Token")
+
+            if show_hide_cb:
+                st.write(cb)
+                show_hide_cb = st.button("Hide Used Token")
+
+            if not show_hide_cb:
+                st.write(response)
 
             # show user input
             user_question = st.text_input("Ask a question about your PDF:")
