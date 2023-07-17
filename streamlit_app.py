@@ -17,7 +17,7 @@ def main():
 
     # upload file
     pdf = st.file_uploader("Upload your PDF", type="pdf")
-
+    summary =""
     # extract the text
     if pdf is not None:
         try:
@@ -45,21 +45,19 @@ def main():
 
             st.header("Here's a brief summary of your PDF:")
             pdf_summary = "Give me a brief summary of the pdf"
-            if pdf_summary:
             
-            
+
+            if pdf_summary is not None and summary is not None:
               with st.spinner('Wait for it...'):
-                #with get_openai_callback() as cb:
                 docs = knowledge_base.similarity_search(pdf_summary)
                 summary = chain.run(input_documents=docs, question=pdf_summary)
-                      #print(cb)
                 st.write(summary)
               #st.success('Done!')
 
 
             # show user input
             user_question = st.text_input("Ask a question about your PDF:")
-            if user_question:
+            if user_question is not None:
                 docs = knowledge_base.similarity_search(user_question)
                 with st.spinner('Wait for it...'):
                   with get_openai_callback() as cb:
