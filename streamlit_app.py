@@ -18,6 +18,7 @@ def generate_summary(knowledge_base, chain):
     summary = chain.run(input_documents=docs, question=pdf_summary)
     return summary
 
+@st.cache
 def main():
     load_dotenv()
     st.set_page_config(page_title="Ask your PDF")
