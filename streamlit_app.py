@@ -40,14 +40,15 @@ def main():
             knowledge_base = FAISS.from_texts(chunks,embeddings)
 
             # brief summary
+            llm = OpenAI()
+            chain = load_qa_chain(llm, chain_type="stuff")
+
             st.header("Here's a brief summary of your PDF:")
             pdf_summary = "Give me a brief summary of the pdf"
-            docs = knowledge_base.similarity_search(pdf_summary)
-
+            
             with st.spinner('Wait for it...'):
-              llm = OpenAI()
-              chain = load_qa_chain(llm, chain_type="stuff")
               with get_openai_callback() as cb_summary:
+                  docs = knowledge_base.similarity_search(pdf_summary)
                   summary = chain.run(input_documents=docs, question=pdf_summary)
                   print(cb_summary)
               st.write(summary)
@@ -59,8 +60,6 @@ def main():
             if user_question:
                 docs = knowledge_base.similarity_search(user_question)
                 with st.spinner('Wait for it...'):
-                  #llm = OpenAI()
-                  #chain = load_qa_chain(llm, chain_type="stuff")
                   with get_openai_callback() as cb:
                      response = chain.run(input_documents=docs, question=user_question)
                      print(cb)
