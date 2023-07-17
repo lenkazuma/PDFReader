@@ -1,6 +1,5 @@
 from dotenv import load_dotenv
 import streamlit as st
-import time
 from PyPDF2 import PdfReader
 from langchain.text_splitter import CharacterTextSplitter
 from langchain.embeddings.openai import OpenAIEmbeddings
@@ -9,6 +8,12 @@ from langchain.chains.question_answering import load_qa_chain
 from langchain.llms import OpenAI
 from langchain.callbacks import get_openai_callback
 import os
+
+def generate_summary(knowledge_base, chain):
+    pdf_summary = "Give me a brief summary of the pdf"
+    docs = knowledge_base.similarity_search(pdf_summary)
+    summary = chain.run(input_documents=docs, question=pdf_summary)
+    return summary
 
 def main():
     load_dotenv()
@@ -37,36 +42,26 @@ def main():
 
             # create embeddings
             embeddings = OpenAIEmbeddings(disallowed_special=())
-            knowledge_base = FAISS.from_texts(chunks,embeddings)
+            knowledge_base = FAISS.from_texts(chunks, embeddings)
 
             # brief summary
             llm = OpenAI()
             chain = load_qa_chain(llm, chain_type="stuff")
+            summary = generate_summary(knowledge_base, chain)
 
             st.header("Here's a brief summary of your PDF:")
-            pdf_summary = "Give me a brief summary of the pdf"
-            
-            
-            #with st.spinner('Wait for it...'):
-            #with get_openai_callback() as cb:
-            docs = knowledge_base.similarity_search(pdf_summary)
-            summary = chain.run(input_documents=docs, question=pdf_summary)
-                  #print(cb)
             st.write(summary)
-            #st.success('Done!')
-
 
             # show user input
             user_question = st.text_input("Ask a question about your PDF:")
             if user_question:
                 docs = knowledge_base.similarity_search(user_question)
-                with st.spinner('Wait for it...'):
-                  with get_openai_callback() as cb:
-                     response = chain.run(input_documents=docs, question=user_question)
-                     print(cb)
-                     # show/hide section using st.beta_expander
-                     with st.expander("Used Tokens", expanded=False):
-                       st.write(cb)
+                with get_openai_callback() as cb:
+                    response = chain.run(input_documents=docs, question=user_question)
+                    print(cb)
+                    # show/hide section using st.beta_expander
+                    with st.expander("Used Tokens", expanded=False):
+                        st.write(cb)
                 st.write(response)
                 
         except IndexError:
