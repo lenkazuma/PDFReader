@@ -39,6 +39,19 @@ def main():
       embeddings = OpenAIEmbeddings(disallowed_special=())
       knowledge_base = FAISS.from_texts(chunks, embeddings)
       
+      # brief summary 
+      pdf_summary = "Give me a brief summary of the pdf"
+      if user_question:
+        docs = knowledge_base.similarity_search(pdf_summary)
+        
+        llm = OpenAI()
+        chain = load_qa_chain(llm, chain_type="stuff")
+        with get_openai_callback() as cb:
+          response = chain.run(input_documents=docs, question=pdf_summary)
+          print(cb)
+           
+        st.write(response)
+
       # show user input
       user_question = st.text_input("Ask a question about your PDF:")
       if user_question:
