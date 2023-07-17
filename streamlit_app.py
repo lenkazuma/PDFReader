@@ -63,9 +63,7 @@ def main():
                     print(cb)
                     # show/hide section using st.beta_expander
                     with st.beta_expander("Used Tokens", expanded=False):
-                      show_hide_cb = st.button("Show Used Token")
-                      if show_hide_cb:
-                        st.write(cb)
+                      st.write(cb)
                 
                 st.write(response)
             
