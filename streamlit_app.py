@@ -40,7 +40,7 @@ def main():
 
             # brief summary
             st.header("Here's a brief summary of your PDF:")
-            st.subheader("Well, if your PDF doesn't contain any text then try another one.🆖")
+            st.caption("Well, if your PDF doesn't contain any text then try another one.🆖")
             pdf_summary = "Give me a brief summary of the pdf"
 
             docs = knowledge_base.similarity_search(pdf_summary)
