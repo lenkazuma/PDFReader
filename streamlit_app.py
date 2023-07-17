@@ -10,15 +10,6 @@ from langchain.llms import OpenAI
 from langchain.callbacks import get_openai_callback
 import os
 
-
-
-def generate_summary(knowledge_base, chain):
-    pdf_summary = "Give me a brief summary of the pdf"
-    docs = knowledge_base.similarity_search(pdf_summary)
-    summary = chain.run(input_documents=docs, question=pdf_summary)
-    return summary
-
-
 def main():
     load_dotenv()
     st.set_page_config(page_title="Ask your PDF")
@@ -26,7 +17,7 @@ def main():
 
     # upload file
     pdf = st.file_uploader("Upload your PDF", type="pdf")
-    
+
     # extract the text
     if pdf is not None:
         try:
@@ -53,12 +44,16 @@ def main():
             chain = load_qa_chain(llm, chain_type="stuff")
 
             st.header("Here's a brief summary of your PDF:")
-
-            with st.spinner('Wait for it...'):
-              #docs = knowledge_base.similarity_search(pdf_summary)
-              #summary = chain.run(input_documents=docs, question=pdf_summary)
-              summary = generate_summary(knowledge_base, chain)
-              st.write(summary)
+            pdf_summary = "Give me a brief summary of the pdf"
+            
+            
+            
+            #with st.spinner('Wait for it...'):
+            #with get_openai_callback() as cb:
+            docs = knowledge_base.similarity_search(pdf_summary)
+            summary = chain.run(input_documents=docs, question=pdf_summary)
+                  #print(cb)
+            st.write(summary)
             #st.success('Done!')
 
 
