@@ -36,7 +36,7 @@ def main():
 
             # create embeddings
             embeddings = OpenAIEmbeddings(disallowed_special=())
-            knowledge_base = FAISS.from_texts(chunks)
+            knowledge_base = FAISS.from_texts(chunks,embeddings)
 
             # brief summary
             st.header("Here's a brief summary of your PDF:")
