@@ -23,6 +23,12 @@ def main():
     
     # extract the text
     if pdf is not None :
+
+        # Clear summary if a new PDF is uploaded
+        if 'summary' in st.session_state and st.session_state.pdf_name != pdf.name:
+            st.session_state.summary = None
+
+        st.session_state.pdf_name = pdf.name
         
         try:
             pdf_reader = PdfReader(pdf)
@@ -49,7 +55,7 @@ def main():
             docs = knowledge_base.similarity_search(pdf_summary)
             
             
-            if 'summary' not in st.session_state :
+            if 'summary' not in st.session_state or st.session_state.summary is None:
               with st.spinner('Wait for it...'):
                 st.session_state.summary = chain.run(input_documents=docs, question=pdf_summary)
             st.write(st.session_state.summary)
