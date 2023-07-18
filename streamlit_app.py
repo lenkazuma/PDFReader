@@ -8,7 +8,6 @@ from langchain.vectorstores import FAISS
 from langchain.chains.question_answering import load_qa_chain
 from langchain.llms import OpenAI
 from langchain.callbacks import get_openai_callback
-import os
 
 def main():
     # brief summary
@@ -42,20 +41,21 @@ def main():
             # create embeddings
             embeddings = OpenAIEmbeddings(disallowed_special=())
             knowledge_base = FAISS.from_texts(chunks,embeddings)
-
+            
             st.header("Here's a brief summary of your PDF:")
             pdf_summary = "Give me a brief summary of the pdf"
+ 
+            docs = knowledge_base.similarity_search(pdf_summary)
             
-            with st.spinner('Wait for it...'):
-              docs = knowledge_base.similarity_search(pdf_summary)
-              summary = chain.run(input_documents=docs, question=pdf_summary)
-                    #print(cb)
-              st.write(summary)
-            #st.success('Done!')
+            
+            if 'summary' not in st.session_state:
+              with st.spinner('Wait for it...'):
+                st.session_state.summary = chain.run(input_documents=docs, question=pdf_summary)
+            st.write(st.session_state.summary)
 
 
             # show user input
-            user_question = st.text_input("Ask a question about your PDF:")
+            user_question = st.text_input("Ask a question about your PDF :")
             if user_question:
                 docs = knowledge_base.similarity_search(user_question)
                 with st.spinner('Wait for it...'):
