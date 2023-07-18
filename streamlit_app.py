@@ -20,6 +20,9 @@ def main():
 
     # upload file
     pdf = st.file_uploader("Upload your PDF", type="pdf")
+    # Initialize session state
+    if 'pdf_name' not in st.session_state:
+        st.session_state.pdf_name = None
     
     # extract the text
     if pdf is not None :
@@ -29,7 +32,7 @@ def main():
             st.session_state.summary = None
 
         st.session_state.pdf_name = pdf.name
-        
+
         try:
             pdf_reader = PdfReader(pdf)
             text = ""
