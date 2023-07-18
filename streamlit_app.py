@@ -19,7 +19,7 @@ def main():
     st.title("EEC PDFReader ✨")
 
     # upload file
-    pdf = st.file_uploader("Upload your PDF", type=["pdf","excel","csv","doc"])
+    pdf = st.file_uploader("Upload your PDF", type=["pdf","xlsx","csv","doc"])
     # Initialize session state
     if 'pdf_name' not in st.session_state:
         st.session_state.pdf_name = None
