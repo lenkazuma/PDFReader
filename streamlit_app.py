@@ -48,7 +48,7 @@ def main():
             docs = knowledge_base.similarity_search(pdf_summary)
             
             
-            if 'summary' not in st.session_state:
+            if 'summary' not in st.session_state or st.session_state == None :
               with st.spinner('Wait for it...'):
                 st.session_state.summary = chain.run(input_documents=docs, question=pdf_summary)
             st.write(st.session_state.summary)
@@ -73,6 +73,6 @@ def main():
         except Exception as e:
             st.error(f"An error occurred: {str(e)}")
     if pdf is None:
-       st.session_state.summary = None
+       st.session_state == None
 if __name__ == '__main__':
     main()
