@@ -72,6 +72,7 @@ def main():
             st.error("Please upload another PDF. This PDF does not contain any text.")
         except Exception as e:
             st.error(f"An error occurred: {str(e)}")
-
+    if pdf is None:
+       st.session_state.summary = None
 if __name__ == '__main__':
     main()
