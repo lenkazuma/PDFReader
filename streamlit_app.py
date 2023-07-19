@@ -24,7 +24,7 @@ def main():
     # brief summary
     llm = OpenAI()
     chain = load_qa_chain(llm, chain_type="stuff")
-
+    chain_large = load_qa_chain(llm, chain_type="map_reduce")
     load_dotenv()
     st.set_page_config(page_title="Ask your PDF")
     st.title("EEC PDFReader ✨")
@@ -45,7 +45,6 @@ def main():
             st.session_state.summary = None
 
         st.session_state.file_name = uploaded_file.name
-
         
         try:
             if file_type == "application/pdf":
@@ -87,27 +86,34 @@ def main():
 
             
             st.header("Here's a brief summary of your file:")
-            pdf_summary = "Give me a brief summary, use the language that the file is in."
+            pdf_summary = "Give me a brief summary,use the language that the file is in"
  
             docs = knowledge_base.similarity_search(pdf_summary)
             
             
             if 'summary' not in st.session_state or st.session_state.summary is None:
               with st.spinner('Wait for it...'):
-                st.session_state.summary = chain.run(input_documents=docs, question=pdf_summary)
+                try:
+                    st.session_state.summary = chain.run(input_documents=docs, question=pdf_summary)
+                except Exception as model_error:
+                    # Fallback to the larger model if the context length is exceeded
+                    st.session_state.summary = chain_large.run(input_documents=docs, question=pdf_summary)
             st.write(st.session_state.summary)
 
 
             # show user input
-            user_question = st.text_input("Ask a question about your file : ")
+            user_question = st.text_input("Ask a question about your file :")
             if user_question:
                 docs = knowledge_base.similarity_search(user_question)
                 with st.spinner('Wait for it...'):
                   with get_openai_callback() as cb:
-                     response = chain.run(input_documents=docs, question=user_question)
-                     print(cb)
-                     # show/hide section using st.beta_expander
-                     with st.expander("Used Tokens", expanded=False):
+                    try:
+                        response = chain.run(input_documents=docs, question=user_question)
+                    except Exception as model_error:
+                        response = chain_large.run(iinput_documents=docs, question=user_question) 
+                    print(cb)
+                    # show/hide section using st.beta_expander
+                    with st.expander("Used Tokens", expanded=False):
                        st.write(cb)
                 st.write(response)
                 
