@@ -68,7 +68,7 @@ def main():
 
             
             st.header("Here's a brief summary of your file:")
-            pdf_summary = "Give me a brief summary of the pdf"
+            pdf_summary = "Give me a brief summary,use the language that the file is in"
  
             docs = knowledge_base.similarity_search(pdf_summary)
             
@@ -80,7 +80,7 @@ def main():
 
 
             # show user input
-            user_question = st.text_input("Ask a question about your PDF :")
+            user_question = st.text_input("Ask a question about your file :")
             if user_question:
                 docs = knowledge_base.similarity_search(user_question)
                 with st.spinner('Wait for it...'):
