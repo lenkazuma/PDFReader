@@ -8,6 +8,8 @@ from langchain.vectorstores import FAISS
 from langchain.chains.question_answering import load_qa_chain
 from langchain.llms import OpenAI
 from langchain.callbacks import get_openai_callback
+from docx import Document
+
 
 def main():
     # brief summary
@@ -19,25 +21,37 @@ def main():
     st.title("EEC PDFReader ✨")
 
     # upload file
-    pdf = st.file_uploader("Upload your PDF", type="pdf")
+    uploaded_file  = st.file_uploader("Upload your PDF", type=["pdf", "docx"])
     # Initialize session state
     if 'pdf_name' not in st.session_state:
         st.session_state.pdf_name = None
     
     # extract the text
-    if pdf is not None :
-
-        # Clear summary if a new PDF is uploaded
-        if 'summary' in st.session_state and st.session_state.pdf_name != pdf.name:
+    if uploaded_file  is not None :
+        file_type = uploaded_file.type
+        # Clear summary if a new file is uploaded
+        if 'summary' in st.session_state and st.session_state.file_name != uploaded_file.name:
             st.session_state.summary = None
 
-        st.session_state.pdf_name = pdf.name
+        st.session_state.file_name = uploaded_file.name
+
 
         try:
-            pdf_reader = PdfReader(pdf)
-            text = ""
-            for page in pdf_reader.pages:
-                text += page.extract_text()
+            if file_type == "application/pdf":
+                # Handle PDF files
+                pdf_reader = PdfReader(uploaded_file)
+                text = ""
+                for page in pdf_reader.pages:
+                    text += page.extract_text()
+
+            elif file_type == "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
+                # Handle Word documents
+                doc = Document(uploaded_file)
+                paragraphs = [p.text for p in doc.paragraphs]
+                text = "\n".join(paragraphs)
+            else:
+                st.error("Unsupported file format. Please upload a PDF or DOCX file.")
+                return
 
             # split into chunks
             text_splitter = CharacterTextSplitter(
@@ -50,7 +64,8 @@ def main():
 
             # create embeddings
             embeddings = OpenAIEmbeddings(disallowed_special=())
-            knowledge_base = FAISS.from_texts(chunks,embeddings)
+            knowledge_base = FAISS.from_texts(chunks, embeddings)
+
             
             st.header("Here's a brief summary of your PDF:")
             pdf_summary = "Give me a brief summary of the pdf"
