@@ -9,6 +9,15 @@ from langchain.chains.question_answering import load_qa_chain
 from langchain.llms import OpenAI
 from langchain.callbacks import get_openai_callback
 from docx import Document
+from docx.table import _Cell
+
+def extract_text_from_table(table):
+    text = ""
+    for row in table.rows:
+        for cell in row.cells:
+            if isinstance(cell, _Cell):
+                text += cell.text + "\n"
+    return text.strip()
 
 
 def main():
@@ -30,6 +39,7 @@ def main():
     # extract the text
     if uploaded_file  is not None :
         file_type = uploaded_file.type
+
         # Clear summary if a new file is uploaded
         if 'summary' in st.session_state and st.session_state.file_name != uploaded_file.name:
             st.session_state.summary = None
@@ -48,14 +58,16 @@ def main():
                 
             elif file_type == "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
                 # Handle Word documents
-                print("pin4")
-                print(file_type)
-                print(uploaded_file)
                 doc = Document(uploaded_file)
-                print(doc)
-                print(doc.paragraphs)
                 paragraphs = [p.text for p in doc.paragraphs]
                 text = "\n".join(paragraphs)
+
+                # Extract text from tables
+                for table in doc.tables:
+                    table_text = extract_text_from_table(table)
+                    if table_text:
+                        text += "\n" + table_text
+                        
             else:
                 st.error("Unsupported file format. Please upload a PDF or DOCX file.")
                 return
@@ -104,6 +116,8 @@ def main():
             #st.error("Please upload another PDF. This PDF does not contain any text.")
         except Exception as e:
             st.error(f"An error occurred: {str(e)}")
+
+
 
 if __name__ == '__main__':
     main()
