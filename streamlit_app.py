@@ -67,7 +67,7 @@ def main():
             knowledge_base = FAISS.from_texts(chunks, embeddings)
 
             
-            st.header("Here's a brief summary of your PDF:")
+            st.header("Here's a brief summary of your file:")
             pdf_summary = "Give me a brief summary of the pdf"
  
             docs = knowledge_base.similarity_search(pdf_summary)
