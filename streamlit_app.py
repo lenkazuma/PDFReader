@@ -46,10 +46,9 @@ def main():
 
             elif file_type == "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
                 # Handle Word documents
+                print(file_type)
+                print(uploaded_file)
                 doc = Document(uploaded_file)
-                print(doc)
-                print(doc.paragraphs)
-                
                 paragraphs = [p.text for p in doc.paragraphs]
                 text = "\n".join(paragraphs)
             else:
