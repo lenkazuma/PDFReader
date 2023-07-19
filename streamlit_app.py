@@ -24,7 +24,7 @@ def main():
     # brief summary
     llm = OpenAI()
     chain = load_qa_chain(llm, chain_type="stuff")
-    chain_large = load_qa_chain(llm, chain_type="map_reduce")
+    chain_large = load_qa_chain(llm, chain_type="refine",verbose=True)
 
     load_dotenv()
     st.set_page_config(page_title="Ask your PDF")
