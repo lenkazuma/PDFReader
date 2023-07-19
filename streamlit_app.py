@@ -21,7 +21,7 @@ def main():
     st.title("EEC PDFReader ✨")
 
     # upload file
-    uploaded_file  = st.file_uploader("Upload your PDF", type=["pdf", "docx"])
+    uploaded_file  = st.file_uploader("Upload your PDF", type=["pdf", "docx","doc"])
     # Initialize session state
     if 'pdf_name' not in st.session_state:
         st.session_state.pdf_name = None
@@ -92,9 +92,9 @@ def main():
                        st.write(cb)
                 st.write(response)
                 
-        except IndexError:
-            st.caption("Well, Seems like your PDF doesn't contain any text, try another one.🆖")
-            st.error("Please upload another PDF. This PDF does not contain any text.")
+        #except IndexError:
+            #st.caption("Well, Seems like your PDF doesn't contain any text, try another one.🆖")
+            #st.error("Please upload another PDF. This PDF does not contain any text.")
         except Exception as e:
             st.error(f"An error occurred: {str(e)}")
 
