@@ -8,3 +8,4 @@ openai==0.27.8
 tiktoken==0.4.0
 numpy==1.21.6
 python-docx==0.8.11
+pycryptodome==3.18.0
