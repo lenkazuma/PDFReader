@@ -19,10 +19,10 @@ def main():
     load_dotenv()
     st.set_page_config(page_title="Ask your PDF")
     st.title("EEC PDFReader ✨")
-    print("pin0")
+    
     # upload file
     uploaded_file  = st.file_uploader("Upload your PDF", type=["pdf", "docx"])
-    print("pin1")
+    
     # Initialize session state
     if 'pdf_name' not in st.session_state:
         st.session_state.pdf_name = None
@@ -36,11 +36,11 @@ def main():
 
         st.session_state.file_name = uploaded_file.name
 
-        print("pin2")
+        
         try:
             if file_type == "application/pdf":
                 # Handle PDF files
-                print("pin3")
+                
                 pdf_reader = PdfReader(uploaded_file)
                 text = ""
                 for page in pdf_reader.pages:
@@ -52,6 +52,8 @@ def main():
                 print(file_type)
                 print(uploaded_file)
                 doc = Document(uploaded_file)
+                print(doc)
+                print(doc.paragraphs)
                 paragraphs = [p.text for p in doc.paragraphs]
                 text = "\n".join(paragraphs)
             else:
