@@ -21,7 +21,7 @@ def main():
     st.title("EEC PDFReader ✨")
 
     # upload file
-    uploaded_file  = st.file_uploader("Upload your PDF", type=["pdf", "docx","doc"])
+    uploaded_file  = st.file_uploader("Upload your PDF", type=["pdf", "docx"])
     # Initialize session state
     if 'pdf_name' not in st.session_state:
         st.session_state.pdf_name = None
@@ -47,6 +47,9 @@ def main():
             elif file_type == "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
                 # Handle Word documents
                 doc = Document(uploaded_file)
+                print(doc)
+                print(doc.paragraphs)
+                
                 paragraphs = [p.text for p in doc.paragraphs]
                 text = "\n".join(paragraphs)
             else:
