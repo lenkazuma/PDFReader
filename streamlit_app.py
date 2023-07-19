@@ -6,6 +6,8 @@ from langchain.text_splitter import CharacterTextSplitter
 from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.vectorstores import FAISS
 from langchain.chains.question_answering import load_qa_chain
+from langchain.chains.summarize import load_summarize_chain
+#from langchain.chains.mapreduce import MapReduceChain
 from langchain.llms import OpenAI
 from langchain.callbacks import get_openai_callback
 from docx import Document
@@ -23,8 +25,11 @@ def extract_text_from_table(table):
 def main():
     # brief summary
     llm = OpenAI()
-    chain = load_qa_chain(llm, chain_type="stuff")
-    chain_large = load_qa_chain(llm, chain_type="refine",verbose=True)
+    chain = load_summarize_chain(llm, chain_type="stuff")
+    chain_large = load_summarize_chain(llm, chain_type="refine",verbose=True)
+    chain_qa = load_qa_chain(llm, chain_type="stuff")
+    chain_large_qa = load_qa_chain(llm, chain_type="refine",verbose=True)
+
 
     load_dotenv()
     st.set_page_config(page_title="Ask your PDF")
@@ -110,10 +115,10 @@ def main():
                 with st.spinner('Wait for it...'):
                   with get_openai_callback() as cb:
                     try:
-                        response = chain.run(input_documents=docs, question=user_question)
+                        response = chain_qa.run(input_documents=docs, question=user_question)
                     except Exception as model_error:
                         print(model_error)
-                        response = chain_large.run(iinput_documents=docs, question=user_question) 
+                        response = chain_large_qa.run(iinput_documents=docs, question=user_question) 
                     print(cb)
                     # show/hide section using st.beta_expander
                     with st.expander("Used Tokens", expanded=False):
