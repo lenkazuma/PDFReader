@@ -19,7 +19,7 @@ def main():
     load_dotenv()
     st.set_page_config(page_title="Ask your PDF")
     st.title("EEC PDFReader ✨")
-
+    print("pin0")
     # upload file
     uploaded_file  = st.file_uploader("Upload your PDF", type=["pdf", "docx"])
     print("pin1")
