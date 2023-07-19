@@ -25,6 +25,7 @@ def main():
     llm = OpenAI()
     chain = load_qa_chain(llm, chain_type="stuff")
     chain_large = load_qa_chain(llm, chain_type="map_reduce")
+
     load_dotenv()
     st.set_page_config(page_title="Ask your PDF")
     st.title("EEC PDFReader ✨")
@@ -97,6 +98,7 @@ def main():
                     st.session_state.summary = chain.run(input_documents=docs, question=pdf_summary)
                 except Exception as model_error:
                     # Fallback to the larger model if the context length is exceeded
+                    print(model_error)
                     st.session_state.summary = chain_large.run(input_documents=docs, question=pdf_summary)
             st.write(st.session_state.summary)
 
@@ -110,6 +112,7 @@ def main():
                     try:
                         response = chain.run(input_documents=docs, question=user_question)
                     except Exception as model_error:
+                        print(model_error)
                         response = chain_large.run(iinput_documents=docs, question=user_question) 
                     print(cb)
                     # show/hide section using st.beta_expander
