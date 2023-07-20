@@ -92,7 +92,7 @@ def main():
 
             
             st.header("Here's a brief summary of your file:")
-            pdf_summary = "Give me a brief summary,use the language that the file is in"
+            pdf_summary = "Give me a concise summary, use the language that the file is in"
  
             docs = knowledge_base.similarity_search(pdf_summary)
             
@@ -105,7 +105,7 @@ def main():
                     # Fallback to the larger model if the context length is exceeded
                     print(maxtoken_error)
                     print("pin0")
-                    st.session_state.summary = chain_large.run(input_documents=docs, question=pdf_summary)
+                    st.session_state.summary = chain_large.run(input_documents=docs[:5], question=pdf_summary)
                     print("pin1")
             st.write(st.session_state.summary)
 
