@@ -58,3 +58,6 @@ If you want to deploy your own version of the application, follow these steps:
   3. Click on the "Deploy" button and follow the instructions provided.
 
 That's it! Your PDF & Word Reader application will be deployed and accessible via the provided URL.
+
+## Currently working on
+Add OCR image pdf text extraction for different languages.
