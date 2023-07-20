@@ -23,11 +23,11 @@ To install and set up the PDF & Word Reader project, follow these steps:
 
 1. Clone the repository:
 
-git clone
+- `git clone https://github.com/lenkazuma/PDFReader.git`
 
 3. Navigate to the project directory:
 
-cd 
+- `cd PDFReader`
 
 3. Install the required dependencies using pip:
 
