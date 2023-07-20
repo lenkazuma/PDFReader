@@ -99,21 +99,23 @@ def main():
 
             
             st.header("Here's a brief summary of your file:")
-            pdf_summary = "Give me a concise summary, use the language that the file is in"
+            pdf_summary = "Give me a concise summary, use the language that the file is in. "
 
             docs = knowledge_base.similarity_search(pdf_summary)
             
             
             if 'summary' not in st.session_state or st.session_state.summary is None:
               with st.spinner('Wait for it...'):
-                try:
-                    st.session_state.summary = chain.run(input_documents=docs, question=pdf_summary)
-                except Exception as maxtoken_error:
-                    # Fallback to the larger model if the context length is exceeded
-                    print(maxtoken_error)
-                    print("pin0")
-                    st.session_state.summary = chain_large.run(input_documents=docs, question=pdf_summary)
-                    print("pin1")
+                with get_openai_callback() as cb:
+                    try:
+                        st.session_state.summary = chain.run(input_documents=docs, question=pdf_summary)
+                    except Exception as maxtoken_error:
+                        # Fallback to the larger model if the context length is exceeded
+                        print(maxtoken_error)
+                        print("pin0")
+                        st.session_state.summary = chain_large.run(input_documents=docs, question=pdf_summary)
+                        print("pin1")
+                    print(cb)
             st.write(st.session_state.summary)
 
 
