@@ -33,11 +33,11 @@ def main():
 
 
     load_dotenv()
-    st.set_page_config(page_title="Ask your PDF")
-    st.title("EEC PDFReader ✨")
+    st.set_page_config(page_title="PDFReader")
+    st.title("PDF & Word Reader ✨")
     
     # upload file
-    uploaded_file  = st.file_uploader("Upload your PDF", type=["pdf", "docx"])
+    uploaded_file  = st.file_uploader("Upload your file", type=["pdf", "docx"])
     
     # Initialize session state
     if 'pdf_name' not in st.session_state:
@@ -106,19 +106,15 @@ def main():
             
             if 'summary' not in st.session_state or st.session_state.summary is None:
               with st.spinner('Wait for it...'):
-                
                     try:
-                        
-                            st.session_state.summary = chain.run(input_documents=docs, question=pdf_summary)
-                            
+                            st.session_state.summary = chain.run(input_documents=docs, question=pdf_summary)    
                     except Exception as maxtoken_error:
                         # Fallback to the larger model if the context length is exceeded
-                        with get_openai_callback() as cb:
-                            print(maxtoken_error)
-                            print("pin0")
-                            st.session_state.summary = chain_large.run(input_documents=docs, question=pdf_summary)
-                            print("pin1")
-                            print(cb)
+                        print(maxtoken_error)
+                        print("pin0")
+                        st.session_state.summary = chain_large.run(input_documents=docs, question=pdf_summary)
+                        print("pin1")
+                            
             st.write(st.session_state.summary)
 
 
