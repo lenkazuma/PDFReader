@@ -127,7 +127,7 @@ def main():
                         response = chain_qa.run(input_documents=docs, question=user_question)
                     except Exception as maxtoken_error:
                         print(maxtoken_error)
-                        response = chain_large_qa.run(iinput_documents=docs, question=user_question) 
+                        response = chain_large_qa.run(input_documents=docs, question=user_question) 
                     print(cb)
                     # show/hide section using st.beta_expander
                     with st.expander("Used Tokens", expanded=False):
