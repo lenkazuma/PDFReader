@@ -105,7 +105,7 @@ def main():
                     # Fallback to the larger model if the context length is exceeded
                     print(maxtoken_error)
                     print("pin0")
-                    st.session_state.summary = chain_large.run(input_documents=docs[:1], question=pdf_summary)
+                    st.session_state.summary = chain_large.run(input_documents=docs[:2], question=pdf_summary)
                     print("pin1")
             st.write(st.session_state.summary)
 
