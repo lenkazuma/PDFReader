@@ -8,7 +8,7 @@ This project was inspired by the work of Alejandro AO and his langchain-ask-pdf 
 ## Enhancements and Modifications
 In this project, I have made several customisations and improvements to the original functionality. These include:
 
-1. **Workaround for Max Token Limit**: I have devised a workaround to overcome the limitation imposed by the maximum token limit of the GPT-3.5 model. This workaround involves utilising map-reduce chain_type and RecursiveCharacterTextSplitter, allowing pre-summarisation in processing of larger documents.
+1. **Workaround for Max Token Limit**: I have devised a workaround to overcome the limitation imposed by the maximum token limit 4097. This workaround involves utilising map-reduce chain_type and RecursiveCharacterTextSplitter, allowing pre-summarisation in processing of larger documents.
 
 2. **Callback Token Used Count**: To optimise the usage of OpenAI's API, an expander that tracks callback tokens used during the QA process is added.
 
