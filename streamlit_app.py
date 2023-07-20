@@ -29,19 +29,20 @@ def main():
     chain_qa = load_qa_chain(llm, chain_type="stuff")
     chain_large_qa = load_qa_chain(llm, chain_type="map_reduce")
 
-
+    # Load environment variables 
     load_dotenv()
+    # Configure Streamlit page settings
     st.set_page_config(page_title="PDFReader")
     st.title("PDF & Word Reader ✨")
     
-    # upload file
+    # Upload file
     uploaded_file  = st.file_uploader("Upload your file", type=["pdf", "docx"])
     
     # Initialize session state
     if 'pdf_name' not in st.session_state:
         st.session_state.pdf_name = None
     
-    # extract the text
+    # Extract the text
     if uploaded_file  is not None :
         file_type = uploaded_file.type
 
@@ -54,7 +55,6 @@ def main():
         try:
             if file_type == "application/pdf":
                 # Handle PDF files
-                
                 pdf_reader = PdfReader(uploaded_file)
                 text = ""
                 for page in pdf_reader.pages:
@@ -76,13 +76,15 @@ def main():
                 st.error("Unsupported file format. Please upload a PDF or DOCX file.")
                 return
 
-            # split into chunks
+            # Split text into chunks, use this if you only use this app for small documents.
             # text_splitter = CharacterTextSplitter(
             #     separator="\n",
             #     chunk_size=1000,
             #     chunk_overlap=200,
             #     length_function=len
             # )
+
+            # Split text into chunks
             text_splitter = RecursiveCharacterTextSplitter(
                 chunk_size=1000,
                 chunk_overlap=200,
@@ -91,7 +93,7 @@ def main():
             chunks = text_splitter.split_text(text)
 
 
-            # create embeddings
+            # Create embeddings
             embeddings = OpenAIEmbeddings(disallowed_special=())
             knowledge_base = FAISS.from_texts(chunks, embeddings)
 
@@ -116,7 +118,7 @@ def main():
             st.write(st.session_state.summary)
 
 
-            # show user input
+            # User input for questions
             user_question = st.text_input("Ask a question about your file :")
             if user_question:
                 docs = knowledge_base.similarity_search(user_question)
@@ -128,7 +130,7 @@ def main():
                         print(maxtoken_error)
                         response = chain_large_qa.run(input_documents=docs, question=user_question) 
                     print(cb)
-                    # show/hide section using st.beta_expander
+                    # Show/hide section using st.beta_expander
                     with st.expander("Used Tokens", expanded=False):
                        st.write(cb)
                 st.write(response)
