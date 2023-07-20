@@ -26,9 +26,9 @@ def main():
     # brief summary
     llm = OpenAI()
     chain = load_summarize_chain(llm, chain_type="stuff")
-    chain_large = load_summarize_chain(llm, chain_type="refine",verbose=True)
+    chain_large = load_summarize_chain(llm, chain_type="map_reduce",verbose=True)
     chain_qa = load_qa_chain(llm, chain_type="stuff")
-    chain_large_qa = load_qa_chain(llm, chain_type="refine",verbose=True)
+    chain_large_qa = load_qa_chain(llm, chain_type="map_reduce",verbose=True)
 
 
     load_dotenv()
@@ -101,9 +101,9 @@ def main():
               with st.spinner('Wait for it...'):
                 try:
                     st.session_state.summary = chain.run(input_documents=docs, question=pdf_summary)
-                except Exception as model_error:
+                except Exception as maxtoken_error:
                     # Fallback to the larger model if the context length is exceeded
-                    print(model_error)
+                    print(maxtoken_error)
                     st.session_state.summary = chain_large.run(input_documents=docs, question=pdf_summary)
             st.write(st.session_state.summary)
 
@@ -116,8 +116,8 @@ def main():
                   with get_openai_callback() as cb:
                     try:
                         response = chain_qa.run(input_documents=docs, question=user_question)
-                    except Exception as model_error:
-                        print(model_error)
+                    except Exception as maxtoken_error:
+                        print(maxtoken_error)
                         response = chain_large_qa.run(iinput_documents=docs, question=user_question) 
                     print(cb)
                     # show/hide section using st.beta_expander
@@ -125,9 +125,9 @@ def main():
                        st.write(cb)
                 st.write(response)
                 
-        #except IndexError:
+        except IndexError:
             #st.caption("Well, Seems like your PDF doesn't contain any text, try another one.🆖")
-            #st.error("Please upload another PDF. This PDF does not contain any text.")
+            st.error("Please upload another PDF. It seems like this PDF doesn't contain any text.")
         except Exception as e:
             st.error(f"An error occurred: {str(e)}")
 
