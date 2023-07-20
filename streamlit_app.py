@@ -7,7 +7,7 @@ from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.vectorstores import FAISS
 from langchain.chains.question_answering import load_qa_chain
 from langchain.chains.summarize import load_summarize_chain
-#from langchain.chains.mapreduce import MapReduceChain
+from langchain.chains.mapreduce import MapReduceChain
 from langchain.llms import OpenAI
 from langchain.callbacks import get_openai_callback
 from docx import Document
@@ -26,9 +26,9 @@ def main():
     # brief summary
     llm = OpenAI()
     chain = load_summarize_chain(llm, chain_type="stuff")
-    chain_large = load_summarize_chain(llm, chain_type="map_reduce",verbose=True)
+    chain_large = load_summarize_chain(llm, chain_type="map_reduce")
     chain_qa = load_qa_chain(llm, chain_type="stuff")
-    chain_large_qa = load_qa_chain(llm, chain_type="map_reduce",verbose=True)
+    chain_large_qa = load_qa_chain(llm, chain_type="map_reduce")
 
 
     load_dotenv()
@@ -104,7 +104,9 @@ def main():
                 except Exception as maxtoken_error:
                     # Fallback to the larger model if the context length is exceeded
                     print(maxtoken_error)
+                    print("pin0")
                     st.session_state.summary = chain_large.run(input_documents=docs, question=pdf_summary)
+                    print("pin1")
             st.write(st.session_state.summary)
 
 
