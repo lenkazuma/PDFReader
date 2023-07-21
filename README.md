@@ -2,7 +2,7 @@
 
 The PDF & Word Reader is a project aimed at providing functionality to perform Summarisation and Retrieval QA on PDF and Word documents. This project is built using Streamlit, a popular Python library for creating web applications, and LangChain, a framework for developing applications powered by language models. It leverages the power of the OpenAI model to process and analyse the documents.
 [](Screenshot.png?raw=true)
-![Image](https://raw.githubusercontent.com/lenkazuma/PDFReader/master/Screenshot.png)
+
 ![Image](Screenshot.png)
 
 ## Acknowledgment
