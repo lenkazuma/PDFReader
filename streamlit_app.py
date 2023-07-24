@@ -37,11 +37,11 @@ def main():
     
     # Upload file
     uploaded_file  = st.file_uploader("Upload your file", type=["pdf", "docx"])
-    
+
     # Initialize session state
     if 'pdf_name' not in st.session_state:
         st.session_state.pdf_name = None
-    
+
     # Extract the text
     if uploaded_file  is not None :
         file_type = uploaded_file.type
@@ -51,7 +51,7 @@ def main():
             st.session_state.summary = None
 
         st.session_state.file_name = uploaded_file.name
-        
+
         try:
             if file_type == "application/pdf":
                 # Handle PDF files
@@ -59,7 +59,7 @@ def main():
                 text = ""
                 for page in pdf_reader.pages:
                     text += page.extract_text()
-                
+
             elif file_type == "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
                 # Handle Word documents
                 doc = Document(uploaded_file)
@@ -71,7 +71,7 @@ def main():
                     table_text = extract_text_from_table(table)
                     if table_text:
                         text += "\n" + table_text
-                        
+
             else:
                 st.error("Unsupported file format. Please upload a PDF or DOCX file.")
                 return
@@ -97,7 +97,7 @@ def main():
             embeddings = OpenAIEmbeddings(disallowed_special=())
             knowledge_base = FAISS.from_texts(chunks, embeddings)
 
-            
+
             st.header("Here's a brief summary of your file:")
             pdf_summary = "Give me a concise summary, use the language that the file is in. "
 
