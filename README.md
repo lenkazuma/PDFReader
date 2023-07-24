@@ -1,7 +1,8 @@
 # Langchain PDF & Word Reader
 
 The PDF & Word Reader is a project aimed at providing functionality to perform Summarisation and Retrieval QA on PDF and Word documents. This project is built using Streamlit, a popular Python library for creating web applications, and LangChain, a framework for developing applications powered by language models. It leverages the power of the OpenAI model to process and analyse the documents.
-[](Screenshot.png?raw=true)
+
+![Image](Screenshot.png)
 
 ## Acknowledgment
 This project was inspired by the work of Alejandro AO and his langchain-ask-pdf project, which can be found at [[Alejandro AO's langchain-ask-pdf]](https://github.com/alejandro-ao/langchain-ask-pdf). Alejandro AO also created a tutorial on YouTube explaining the project, which you can watch at [his tutorial on YT](https://www.youtube.com/watch?v=wUAUdEw5oxM).
@@ -15,7 +16,7 @@ In this project, I have made several customisations and improvements to the orig
 
 4. **Error Handling**: Which doesn't really exist in the original repo.
 
-5. **Summary Prompt**: Generation of a concise summary of the extracted text whenever a file is uploaded. This can be useful for quickly grasping the main points of the document.
+5. **Summary Prompt**: Generation of a concise summary of the extracted text whenever a file is uploaded. This can be useful for quickly grasping the main points of the document. Streamlit state session is added to avoide re-running the summary when qa is running.
 
 
 ## Installation
