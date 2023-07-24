@@ -16,7 +16,7 @@ In this project, I have made several customisations and improvements to the orig
 
 4. **Error Handling**: Which doesn't really exist in the original repo.
 
-5. **Summary Prompt**: Generation of a concise summary of the extracted text whenever a file is uploaded. This can be useful for quickly grasping the main points of the document.
+5. **Summary Prompt**: Generation of a concise summary of the extracted text whenever a file is uploaded. This can be useful for quickly grasping the main points of the document. Streamlit state session is added to avoide re-running the summary when qa is running.
 
 
 ## Installation
