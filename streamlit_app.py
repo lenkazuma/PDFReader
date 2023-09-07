@@ -24,10 +24,8 @@ def extract_text_from_table(table):
 
 # Configure Streamlit page settings
 st.set_page_config(page_title="PDFReader")
-
-
-
-
+st.title("PDF & Word Reader ✨")
+    
 
 def main():
     # brief summary
@@ -60,8 +58,7 @@ def main():
    # Load environment variables 
     load_dotenv()
 
-    st.title("PDF & Word Reader ✨")
-    
+
     # Upload file
     uploaded_file  = st.file_uploader("Upload your file", type=["pdf", "docx"])
 
