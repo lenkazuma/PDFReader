@@ -26,22 +26,22 @@ def extract_text_from_table(table):
 st.set_page_config(page_title="PDFReader")
 
 
-with st.sidebar:
-    st.title('🤗💬 LLM PDFReader App')
-    st.markdown("""
-    ## About
-    This app is an LLM-powered chatbot built using:
-    - [Streamlit](https://streamlit.io/)
-    - [Langchain](https://python.langchian.com/)
-    - [OpenAI](https://platform.openai.com/docs/models) LLM model        
-    """)
-    add_vertical_space(5)
-    #st.write("")
+
 
 
 def main():
     # brief summary
- 
+    with st.sidebar:
+        st.title('🤗💬 LLM PDFReader App')
+        st.markdown("""
+        ## About
+        This app is an LLM-powered chatbot built using:
+        - [Streamlit](https://streamlit.io/)
+        - [Langchain](https://python.langchian.com/)
+        - [OpenAI](https://platform.openai.com/docs/models) LLM model        
+        """)
+        add_vertical_space(5)
+
 
     #llm = OpenAI(temperature=0.7, model="text-davinci-003")
     llm = OpenAI(temperature=0.7, model='gpt-3.5-turbo')
