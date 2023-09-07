@@ -22,15 +22,13 @@ def extract_text_from_table(table):
     return text.strip()
 #side bar contents
 with st.sidebar:
-    st.title('🤗💬 LLM Chat App')
+    st.title('🤗💬 LLM PDFReader App')
     st.markdown("""
     ## About
     This app is an LLM-powered chatbot built using:
     - [Streamlit](https://streamlit.io/)
     - [Langchain](https://python.langchian.com/)
-    - [OpenAI](https://platform.openai.com/docs/models) LLM model
-    - [Github](https://github.com/praj2408/Langchain-PDF-App-GUI) Repository
-                
+    - [OpenAI](https://platform.openai.com/docs/models) LLM model        
     """)
     add_vertical_space(5)
     #st.write("")
