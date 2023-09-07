@@ -28,6 +28,8 @@ st.title("PDF & Word Reader ✨")
     
 
 def main():
+    if "model" not in st.session_state:
+        st.session_state.model = "text-davinci-003"
     # brief summary
     with st.sidebar:
         st.title('🤗💬 LLM PDFReader App')
@@ -45,8 +47,7 @@ def main():
         )
         add_vertical_space(5)
 
-    if "model" not in st.session_state:
-        st.session_state.model = "text-davinci-003"
+
 
 
     llm = OpenAI(temperature=0.7, model=st.session_state.model)
