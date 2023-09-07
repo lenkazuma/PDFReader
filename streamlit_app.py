@@ -21,6 +21,11 @@ def extract_text_from_table(table):
                 text += cell.text + "\n"
     return text.strip()
 #side bar contents
+
+# Configure Streamlit page settings
+st.set_page_config(page_title="PDFReader")
+
+
 with st.sidebar:
     st.title('🤗💬 LLM PDFReader App')
     st.markdown("""
@@ -48,8 +53,6 @@ def main():
    # Load environment variables 
     load_dotenv()
 
-    # Configure Streamlit page settings
-    st.set_page_config(page_title="PDFReader")
     st.title("PDF & Word Reader ✨")
     
     # Upload file
