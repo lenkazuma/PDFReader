@@ -42,8 +42,15 @@ def main():
         """)
         add_vertical_space(5)
 
+    if "model" not in st.session_state:
+        st.session_state.model = "text-davinci-003"
 
-    llm = OpenAI(temperature=0.7, model="text-davinci-003")
+    st.radio(
+        "Model 👉",
+        key="model",
+        options=["text-ada-001", "text-davinci-002", "text-davinci-003"],
+    )
+    llm = OpenAI(temperature=0.7, model=st.session_state.model)
     #llmchat = OpenAI(temperature=0.7, model_name='gpt-3.5-turbo')
     chain = load_summarize_chain(llm, chain_type="stuff")
     chain_large = load_summarize_chain(llm, chain_type="map_reduce")
