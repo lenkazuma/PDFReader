@@ -11,6 +11,7 @@ from langchain.llms import OpenAI
 from langchain.callbacks import get_openai_callback
 from docx import Document
 from docx.table import _Cell
+from streamlit_extras.add_vertical_space import add_vertical_space
 
 def extract_text_from_table(table):
     text = ""
@@ -19,18 +20,33 @@ def extract_text_from_table(table):
             if isinstance(cell, _Cell):
                 text += cell.text + "\n"
     return text.strip()
+#side bar contents
+with st.sidebar:
+    st.title('🤗💬 LLM Chat App')
+    st.markdown("""
+    ## About
+    This app is an LLM-powered chatbot built using:
+    - [Streamlit](https://streamlit.io/)
+    - [Langchain](https://python.langchian.com/)
+    - [OpenAI](https://platform.openai.com/docs/models) LLM model
+    - [Github](https://github.com/praj2408/Langchain-PDF-App-GUI) Repository
+                
+    """)
+    add_vertical_space(5)
+    #st.write("")
 
+# Load environment variables 
+load_dotenv()
 
 def main():
     # brief summary
-    llm = OpenAI()
+    llm = OpenAI(temperature=0.7, model_name='gpt-3.5-turbo')
     chain = load_summarize_chain(llm, chain_type="stuff")
     chain_large = load_summarize_chain(llm, chain_type="map_reduce")
     chain_qa = load_qa_chain(llm, chain_type="stuff")
     chain_large_qa = load_qa_chain(llm, chain_type="map_reduce")
 
-    # Load environment variables 
-    load_dotenv()
+
     # Configure Streamlit page settings
     st.set_page_config(page_title="PDFReader")
     st.title("PDF & Word Reader ✨")
