@@ -119,7 +119,7 @@ def main():
 
 
             # User input for questions
-            user_question = st.text_input("Ask a question about your file :")
+            user_question = st.text_input("Ask a question about your file:")
             if user_question:
                 docs = knowledge_base.similarity_search(user_question)
                 with st.spinner('Wait for it...'):
