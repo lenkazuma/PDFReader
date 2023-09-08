@@ -137,9 +137,8 @@ def main():
                     except Exception as maxtoken_error:
                         # Fallback to the larger model if the context length is exceeded
                         print(maxtoken_error)
-                        print("pin0")
                         st.session_state.summary = chain_large.run(input_documents=docs, question=pdf_summary)
-                        print("pin1")
+                    print(cb)    
                             
             st.write(st.session_state.summary)
 
@@ -157,8 +156,8 @@ def main():
                         response = chain_large_qa.run(input_documents=docs, question=user_question) 
                     print(cb)
                     # Show/hide section using st.beta_expander
-                    with st.expander("Used Tokens", expanded=False):
-                       st.write(cb)
+                    #with st.expander("Used Tokens", expanded=False):
+                       #st.write(cb)
                 st.write(response)
                 
         except IndexError:
