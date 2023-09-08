@@ -132,13 +132,14 @@ def main():
             
             if 'summary' not in st.session_state or st.session_state.summary is None:
               with st.spinner('Wait for it...'):
-                    try:
-                        st.session_state.summary = chain.run(input_documents=docs, question=pdf_summary)    
-                    except Exception as maxtoken_error:
-                        # Fallback to the larger model if the context length is exceeded
-                        print(maxtoken_error)
-                        st.session_state.summary = chain_large.run(input_documents=docs, question=pdf_summary)
-                    print(cb)    
+                    with get_openai_callback() as scb:
+                        try:
+                            st.session_state.summary = chain.run(input_documents=docs, question=pdf_summary)    
+                        except Exception as maxtoken_error:
+                            # Fallback to the larger model if the context length is exceeded
+                            print(maxtoken_error)
+                            st.session_state.summary = chain_large.run(input_documents=docs, question=pdf_summary)
+                        print(scb)    
                             
             st.write(st.session_state.summary)
 
