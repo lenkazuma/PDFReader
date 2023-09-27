@@ -1,4 +1,5 @@
 from dotenv import load_dotenv
+from langchain.vectorstores import Chroma
 import streamlit as st
 from PyPDF2 import PdfReader
 from langchain.text_splitter import CharacterTextSplitter
@@ -12,6 +13,23 @@ from langchain.callbacks import get_openai_callback
 from docx import Document
 from docx.table import _Cell
 from streamlit_extras.add_vertical_space import add_vertical_space
+import sys
+__import__('pysqlite3')
+sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
+
+
+def clear_history():
+    if "history" in st.session_state:
+        del st.session_state["history"]
+
+def format_chat_history(chat_history):
+    formatted_history = ""
+    for entry in chat_history:
+        question, answer = entry
+        # Added an extra '\n' for the blank line
+        formatted_history += f"Question: {question}\nAnswer: {answer}\n\n"
+    return formatted_history
+
 
 def extract_text_from_table(table):
     text = ""
