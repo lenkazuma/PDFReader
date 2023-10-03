@@ -14,8 +14,6 @@ from docx import Document
 from docx.table import _Cell
 from streamlit_extras.add_vertical_space import add_vertical_space
 import sys
-__import__('pysqlite3')
-sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 
 
 def clear_history():
