@@ -144,7 +144,7 @@ def main():
             print("Done0")
             # Split text into chunks
             text_splitter = RecursiveCharacterTextSplitter(
-                chunk_size=1000,
+                chunk_size=300,
                 chunk_overlap=20,
                 length_function=len
             )
