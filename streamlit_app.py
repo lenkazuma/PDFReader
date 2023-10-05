@@ -154,8 +154,9 @@ def main():
             # Create embeddings
             st.session_state.knowledge_base = create_embeddings(chunks)   
             print("Done")
-            st.header("Here's a brief summary of your file:")
-            pdf_summary = "Give me a concise summary, use the language that the file is in. "
+
+            st.header("文件概述's a brief summary of your file:")
+            pdf_summary = "请给我这个文件的概述。 "
 
             docs = st.session_state.knowledge_base.similarity_search(pdf_summary)
             
