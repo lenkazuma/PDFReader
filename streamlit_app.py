@@ -52,7 +52,7 @@ st.set_page_config(page_title="PDFReader")
 st.title("PDF & Word Reader ✨")
     
 def create_embeddings(chunks):
-
+    from langchain.embeddings import QianfanEmbeddingsEndpoint
     print("Embedding to Chroma DB...")
     embeddings = QianfanEmbeddingsEndpoint()
     vector_store = Chroma.from_documents(documents=chunks, embedding=embeddings)
