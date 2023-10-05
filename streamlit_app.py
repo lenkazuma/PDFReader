@@ -72,11 +72,10 @@ def main():
         - [Langchain](https://python.langchian.com/)
         - [OpenAI](https://platform.openai.com/docs/models) LLM model        
         """)
-        st.radio(
-        "Model 👉",
-        key="model",
-        options=["text-ada-001", "text-davinci-002", "text-davinci-003"],
-        )
+        #st.radio(
+        #"模型配置 👉",
+        #key="model",
+        #options=["text-ada-001", "text-davinci-002", "text-davinci-003"],)
         # Upload file
         uploaded_file  = st.file_uploader("Upload your file", type=["pdf", "docx"])
         add_vertical_space(5)
@@ -157,7 +156,7 @@ def main():
             st.header("Here's a brief summary of your file:")
             pdf_summary = "Give me a concise summary, use the language that the file is in. "
 
-            docs = knowledge_base.similarity_search(pdf_summary)
+            docs = st.session_state.knowledge_base.similarity_search(pdf_summary)
             
             
             if 'summary' not in st.session_state or st.session_state.summary is None:
