@@ -83,6 +83,8 @@ def main():
 
     #llm = OpenAI(temperature=0.7, model=st.session_state.model)
     #llmchat = OpenAI(temperature=0.7, model_name='gpt-3.5-turbo')
+
+
     llm = Wenxin(model="ernie-bot-turbo")
     chain = load_summarize_chain(llm, chain_type="stuff")
     chain_large = load_summarize_chain(llm, chain_type="map_reduce")
@@ -143,7 +145,7 @@ def main():
             # Split text into chunks
             text_splitter = RecursiveCharacterTextSplitter(
                 chunk_size=384,
-                chunk_overlap=0,
+                chunk_overlap=200,
                 length_function=len
             )
             chunks = text_splitter.create_documents(text)
