@@ -51,7 +51,13 @@ def extract_text_from_table(table):
 st.set_page_config(page_title="PDFReader")
 st.title("PDF & Word Reader ✨")
     
+def create_embeddings(chunks):
 
+    print("Embedding to Chroma DB...")
+    embeddings = QianfanEmbeddingsEndpoint()
+    vector_store = Chroma.from_documents(documents=chunks, embedding=embeddings)
+    print("Done")
+    return vector_store
 
 def main():
     if "model" not in st.session_state:
@@ -73,7 +79,6 @@ def main():
         )
         # Upload file
         uploaded_file  = st.file_uploader("Upload your file", type=["pdf", "docx"])
-
         add_vertical_space(5)
 
 
@@ -84,9 +89,18 @@ def main():
     chain_qa = load_qa_chain(llm, chain_type="stuff")
     chain_large_qa = load_qa_chain(llm, chain_type="map_reduce")
 
-   # Load environment variables 
+    # Load environment variables 
     load_dotenv()
 
+    # Create the placeholder for chat history
+    chat_history_placeholder = st.empty()
+
+    if "history" not in st.session_state:
+        st.session_state.history = []
+
+    # Create an empty text area at the start
+    chat_history_placeholder.text_area(label="Chat History", value="", height=400)
+    
     # Initialize session state
     if 'pdf_name' not in st.session_state:
         st.session_state.pdf_name = None
@@ -136,8 +150,8 @@ def main():
 
 
             # Create embeddings
-            embeddings = OpenAIEmbeddings(disallowed_special=())
-            knowledge_base = FAISS.from_texts(chunks, embeddings)
+            st.session_state.knowledge_base = create_embeddings(chunks)   
+            
 
 
             st.header("Here's a brief summary of your file:")
