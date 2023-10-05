@@ -70,7 +70,7 @@ def main():
         This app is an LLM-powered chatbot built using:
         - [Streamlit](https://streamlit.io/)
         - [Langchain](https://python.langchian.com/)
-        - [OpenAI](https://platform.openai.com/docs/models) LLM model        
+        - [千帆大模型](https://cloud.baidu.com/qianfandev/) LLM model        
         """)
         #st.radio(
         #"模型配置 👉",
