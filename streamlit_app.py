@@ -146,13 +146,11 @@ def main():
                 length_function=len
             )
             chunks = text_splitter.create_documents(text)
-
+            print("Done1")
 
             # Create embeddings
             st.session_state.knowledge_base = create_embeddings(chunks)   
-            
-
-
+            print("Done")
             st.header("Here's a brief summary of your file:")
             pdf_summary = "Give me a concise summary, use the language that the file is in. "
 
