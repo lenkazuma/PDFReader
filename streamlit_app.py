@@ -139,7 +139,7 @@ def main():
                 st.error("Unsupported file format. Please upload a PDF or DOCX file.")
                 return
 
-
+            print("Done0")
             # Split text into chunks
             text_splitter = RecursiveCharacterTextSplitter(
                 chunk_size=384,
