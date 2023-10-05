@@ -83,7 +83,7 @@ def main():
 
     #llm = OpenAI(temperature=0.7, model=st.session_state.model)
     #llmchat = OpenAI(temperature=0.7, model_name='gpt-3.5-turbo')
-    llm = Wenxin()
+    llm = Wenxin(model="ernie-bot-turbo")
     chain = load_summarize_chain(llm, chain_type="stuff")
     chain_large = load_summarize_chain(llm, chain_type="map_reduce")
     chain_qa = load_qa_chain(llm, chain_type="stuff")
