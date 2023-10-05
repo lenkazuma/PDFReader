@@ -141,8 +141,8 @@ def main():
 
             # Split text into chunks
             text_splitter = RecursiveCharacterTextSplitter(
-                chunk_size=1000,
-                chunk_overlap=200,
+                chunk_size=384,
+                chunk_overlap=0,
                 length_function=len
             )
             chunks = text_splitter.create_documents(text)
@@ -176,7 +176,7 @@ def main():
             # User input for questions
             user_question = st.text_input("Ask a question about your file:")
             if user_question:
-                docs = knowledge_base.similarity_search(user_question)
+                docs = st.session_state.knowledge_base.similarity_search(user_question)
                 with st.spinner('Wait for it...'):
                   with get_openai_callback() as cb:
                     try:
