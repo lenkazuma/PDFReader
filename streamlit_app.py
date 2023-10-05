@@ -84,7 +84,7 @@ def main():
     #llm = OpenAI(temperature=0.7, model=st.session_state.model)
     #llmchat = OpenAI(temperature=0.7, model_name='gpt-3.5-turbo')
 
-
+    print("tag1")
     llm = Wenxin(model="ernie-bot-turbo")
     chain = load_summarize_chain(llm, chain_type="stuff")
     chain_large = load_summarize_chain(llm, chain_type="map_reduce")
@@ -116,7 +116,7 @@ def main():
             st.session_state.summary = None
 
         st.session_state.file_name = uploaded_file.name
-
+        print("tag2")
         try:
             if file_type == "application/pdf":
                 # Handle PDF files
