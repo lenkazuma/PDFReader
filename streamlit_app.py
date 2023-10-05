@@ -13,7 +13,16 @@ from langchain.callbacks import get_openai_callback
 from docx import Document
 from docx.table import _Cell
 from streamlit_extras.add_vertical_space import add_vertical_space
+
+from langchain.vectorstores import Chroma
+from langchain.embeddings import QianfanEmbeddingsEndpoint
+from langchain_wenxin.llms import Wenxin
+import streamlit.components.v1 as components
+import streamlit as st
 import sys
+__import__('pysqlite3')
+sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
+
 
 
 def clear_history():
@@ -43,6 +52,7 @@ st.set_page_config(page_title="PDFReader")
 st.title("PDF & Word Reader ✨")
     
 
+
 def main():
     if "model" not in st.session_state:
         st.session_state.model = "text-davinci-003"
@@ -61,9 +71,10 @@ def main():
         key="model",
         options=["text-ada-001", "text-davinci-002", "text-davinci-003"],
         )
+        # Upload file
+        uploaded_file  = st.file_uploader("Upload your file", type=["pdf", "docx"])
+
         add_vertical_space(5)
-
-
 
 
     llm = OpenAI(temperature=0.7, model=st.session_state.model)
@@ -75,10 +86,6 @@ def main():
 
    # Load environment variables 
     load_dotenv()
-
-
-    # Upload file
-    uploaded_file  = st.file_uploader("Upload your file", type=["pdf", "docx"])
 
     # Initialize session state
     if 'pdf_name' not in st.session_state:
@@ -118,13 +125,6 @@ def main():
                 st.error("Unsupported file format. Please upload a PDF or DOCX file.")
                 return
 
-            # Split text into chunks, use this if you only use this app for small documents.
-            # text_splitter = CharacterTextSplitter(
-            #     separator="\n",
-            #     chunk_size=1000,
-            #     chunk_overlap=200,
-            #     length_function=len
-            # )
 
             # Split text into chunks
             text_splitter = RecursiveCharacterTextSplitter(

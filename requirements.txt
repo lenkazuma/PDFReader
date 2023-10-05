@@ -1,4 +1,4 @@
-langchain==0.0.162
+langchain==0.0.292
 PyPDF2==3.0.1
 python-dotenv==1.0.0
 streamlit==1.18.1
@@ -10,3 +10,8 @@ numpy==1.21.6
 python-docx==0.8.11
 pycryptodome==3.18.0
 streamlit-extras
+docx2txt
+chromadb
+pysqlite3-binary
+langchain-wenxin
+qianfan==0.0.3
