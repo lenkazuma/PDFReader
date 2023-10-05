@@ -144,8 +144,8 @@ def main():
             print("Done0")
             # Split text into chunks
             text_splitter = RecursiveCharacterTextSplitter(
-                chunk_size=384,
-                chunk_overlap=200,
+                chunk_size=1000,
+                chunk_overlap=20,
                 length_function=len
             )
             chunks = text_splitter.create_documents(text)
@@ -155,8 +155,8 @@ def main():
             st.session_state.knowledge_base = create_embeddings(chunks)   
             print("Done")
 
-            st.header("文件概述's a brief summary of your file:")
-            pdf_summary = "请给我这个文件的概述。 "
+            st.header("文件概述:")
+            pdf_summary = "请告诉我这个文件讲了什么？ "
 
             docs = st.session_state.knowledge_base.similarity_search(pdf_summary)
             
