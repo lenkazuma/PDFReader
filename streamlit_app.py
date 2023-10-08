@@ -4,7 +4,7 @@ import streamlit as st
 from PyPDF2 import PdfReader
 from langchain.text_splitter import CharacterTextSplitter
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-#from langchain.embeddings.openai import OpenAIEmbeddings
+from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.vectorstores import FAISS
 from langchain.chains.question_answering import load_qa_chain
 from langchain.chains.summarize import load_summarize_chain
@@ -13,16 +13,7 @@ from langchain.callbacks import get_openai_callback
 from docx import Document
 from docx.table import _Cell
 from streamlit_extras.add_vertical_space import add_vertical_space
-
-from langchain.vectorstores import Chroma
-from langchain.embeddings import QianfanEmbeddingsEndpoint
-from langchain_wenxin.llms import Wenxin
-import streamlit.components.v1 as components
-import streamlit as st
 import sys
-__import__('pysqlite3')
-sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
-
 
 
 def clear_history():
@@ -51,13 +42,6 @@ def extract_text_from_table(table):
 st.set_page_config(page_title="PDFReader")
 st.title("PDF & Word Reader ✨")
     
-def create_embeddings(chunks):
-    from langchain.embeddings import QianfanEmbeddingsEndpoint
-    print("Embedding to Chroma DB...")
-    embeddings = QianfanEmbeddingsEndpoint()
-    vector_store = Chroma.from_documents(documents=chunks, embedding=embeddings)
-    print("Done")
-    return vector_store
 
 def main():
     if "model" not in st.session_state:
@@ -70,39 +54,32 @@ def main():
         This app is an LLM-powered chatbot built using:
         - [Streamlit](https://streamlit.io/)
         - [Langchain](https://python.langchian.com/)
-        - [千帆大模型](https://cloud.baidu.com/qianfandev/) LLM model        
+        - [OpenAI](https://platform.openai.com/docs/models) LLM model        
         """)
-        #st.radio(
-        #"模型配置 👉",
-        #key="model",
-        #options=["text-ada-001", "text-davinci-002", "text-davinci-003"],)
-        # Upload file
-        uploaded_file  = st.file_uploader("Upload your file", type=["pdf", "docx"])
+        st.radio(
+        "Model 👉",
+        key="model",
+        options=["text-ada-001", "text-davinci-002", "text-davinci-003"],
+        )
         add_vertical_space(5)
 
 
-    #llm = OpenAI(temperature=0.7, model=st.session_state.model)
-    #llmchat = OpenAI(temperature=0.7, model_name='gpt-3.5-turbo')
 
-    print("tag1")
-    llm = Wenxin(model="ernie-bot-turbo")
+
+    llm = OpenAI(temperature=0.7, model=st.session_state.model)
+    #llmchat = OpenAI(temperature=0.7, model_name='gpt-3.5-turbo')
     chain = load_summarize_chain(llm, chain_type="stuff")
     chain_large = load_summarize_chain(llm, chain_type="map_reduce")
     chain_qa = load_qa_chain(llm, chain_type="stuff")
     chain_large_qa = load_qa_chain(llm, chain_type="map_reduce")
 
-    # Load environment variables 
+   # Load environment variables 
     load_dotenv()
 
-    # Create the placeholder for chat history
-    chat_history_placeholder = st.empty()
 
-    if "history" not in st.session_state:
-        st.session_state.history = []
+    # Upload file
+    uploaded_file  = st.file_uploader("Upload your file", type=["pdf", "docx"])
 
-    # Create an empty text area at the start
-    chat_history_placeholder.text_area(label="Chat History", value="", height=400)
-    
     # Initialize session state
     if 'pdf_name' not in st.session_state:
         st.session_state.pdf_name = None
@@ -116,7 +93,7 @@ def main():
             st.session_state.summary = None
 
         st.session_state.file_name = uploaded_file.name
-        print("tag2")
+
         try:
             if file_type == "application/pdf":
                 # Handle PDF files
@@ -141,24 +118,32 @@ def main():
                 st.error("Unsupported file format. Please upload a PDF or DOCX file.")
                 return
 
-            print("Done0")
+            # Split text into chunks, use this if you only use this app for small documents.
+            # text_splitter = CharacterTextSplitter(
+            #     separator="\n",
+            #     chunk_size=1000,
+            #     chunk_overlap=200,
+            #     length_function=len
+            # )
+
             # Split text into chunks
             text_splitter = RecursiveCharacterTextSplitter(
-                chunk_size=300,
-                chunk_overlap=20,
+                chunk_size=1000,
+                chunk_overlap=200,
                 length_function=len
             )
-            chunks = text_splitter.create_documents(text)
-            print("Done1")
+            chunks = text_splitter.split_text(text)
+
 
             # Create embeddings
-            st.session_state.knowledge_base = create_embeddings(chunks)   
-            print("Done")
+            embeddings = OpenAIEmbeddings(disallowed_special=())
+            knowledge_base = FAISS.from_texts(chunks, embeddings)
 
-            st.header("文件概述:")
-            pdf_summary = "请告诉我这个文件讲了什么？ "
 
-            docs = st.session_state.knowledge_base.similarity_search(pdf_summary)
+            st.header("Here's a brief summary of your file:")
+            pdf_summary = "Give me a concise summary, use the language that the file is in. "
+
+            docs = knowledge_base.similarity_search(pdf_summary)
             
             
             if 'summary' not in st.session_state or st.session_state.summary is None:
@@ -178,7 +163,7 @@ def main():
             # User input for questions
             user_question = st.text_input("Ask a question about your file:")
             if user_question:
-                docs = st.session_state.knowledge_base.similarity_search(user_question)
+                docs = knowledge_base.similarity_search(user_question)
                 with st.spinner('Wait for it...'):
                   with get_openai_callback() as cb:
                     try:
