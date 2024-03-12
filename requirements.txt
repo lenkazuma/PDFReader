@@ -1,7 +1,7 @@
-langchain==0.0.292
+langchain
 PyPDF2==3.0.1
-python-dotenv==1.0.0
-streamlit==1.18.1
+python-dotenv
+streamlit
 faiss-cpu==1.7.4
 altair<5
 openai==0.27.8
@@ -13,5 +13,4 @@ streamlit-extras
 docx2txt
 chromadb
 pysqlite3-binary
-langchain-wenxin
-qianfan==0.0.3
+qianfan
