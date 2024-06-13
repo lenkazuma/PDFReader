@@ -51,7 +51,7 @@ If you want to deploy your own version of the application, follow these steps:
 
 - Using the CLI:
   ```
-  streamlit deploy your-app-name
+  streamlit run your-app-name.py
   ```
 
 - Using the web interface:
